@@ -1,0 +1,48 @@
+services:
+  project-zomboid-server:
+    image: renegademaster/zomboid-dedicated-server:latest
+    container_name: zomboid
+    restart: unless-stopped
+    ports:
+      - "16261:16261/udp"   # Primary game port
+      - "16262:16262/udp"   # Secondary UDP port
+      - "27015:27015/tcp"   # RCON
+      - "8766:8766/udp"     # Steam
+      - "8767:8767/udp"     # Steam
+    volumes:
+      - ./ZomboidDedicatedServer:/home/steam/ZomboidDedicatedServer
+      - ./ZomboidConfig:/home/steam/Zomboid
+    environment:
+      # --- Admin ---
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
+
+      # --- Server identity ---
+      SERVER_NAME: "ZomboidEE"
+      SERVER_PASSWORD: "${SERVER_PASSWORD}"
+      PUBLIC_SERVER: "true"
+
+      # --- Network ---
+      BIND_IP: "0.0.0.0"
+      DEFAULT_PORT: "16261"
+      UDP_PORT: "16262"
+
+      # --- Steam ---
+      USE_STEAM: "true"
+      STEAM_VAC: "true"
+      GAME_VERSION: "public"
+
+      # --- RCON ---
+      RCON_PORT: "27015"
+      RCON_PASSWORD: "${RCON_PASSWORD}"
+
+      # --- Gameplay ---
+      MAX_PLAYERS: "2"
+      PAUSE_ON_EMPTY: "true"
+      AUTOSAVE_INTERVAL: "10"
+
+      # --- Performance ---
+      MAX_RAM: "4096m"
+
+      # --- System ---
+      TZ: "UTC+3"
